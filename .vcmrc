@@ -1,0 +1,16 @@
+{
+  "types": ["Feat", "Fix", "Docs", "Style", "Refactor", "Perf", "Test", "Chore", "Tag", "Revert"],
+  "scope": {
+    "required": false,
+    "allowed": ["*"],
+    "validate": false,
+    "multiple": false
+  },
+  "warnOnFail": false,
+  "maxSubjectLength": 100,
+  "subjectPattern": ".+",
+  "subjectPatternErrorMsg": "subject does not match subject pattern!",
+  "helpMessage": "",
+  "autoFix": false
+}
+
