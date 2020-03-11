@@ -1,6 +1,6 @@
 # Bumblebee
 
-> 企业级Node React 开发手架
+> 企业级Node React 开发脚手架
 
 
 ## TODO
