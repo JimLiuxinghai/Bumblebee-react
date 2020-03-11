@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist", //输出目录 tsc 
+    "sourceMap": true, //是否要生成sourcemap文件
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es5", //编译的目标是ES5
+    "jsx": "react", //如何编译JSX语法
+    "esModuleInterop": true, //允许在common.js模块和es module进行转换
+    "baseUrl": ".", //查找非相对路径的模块的起始位置
+    "lib": [
+      "es6",
+      "dom"
+    ], // 编译需要的库文件
+    "allowJs": true, // 允许编译js文件
+    "experimentalDecorators": true, // 启用实验性质的语法装饰器
+    "removeComments": true, // 编译js时删除注释
+    "paths": {
+      "@/*": [
+        "public/static/*"
+      ]
+    }
+  },
+  "include": [
+    "./public/**/*" //只编译src目录下面的ts文件
+  ]
+}
