@@ -11,15 +11,15 @@
 ### 前端：
     
     开发环境编译
-    ```
+
     npm run watch
-    ```
+
 
     线上环境编译
 
-    ```
+
     npm run build
-    ```
+
 
 ## TODO
 
