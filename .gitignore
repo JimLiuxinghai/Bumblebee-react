@@ -7,13 +7,15 @@ npm-debug.log*
 .lock-wscript
 
 config/env/development.lxh.js
+config/pm2/lxh.json
 
 # Dependency directories
 node_modules
 # Optional npm cache directory
 .npm
 .idea
-sftp-config.json
+
 
 .DS_Store
 .vscode
+dist/

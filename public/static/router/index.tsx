@@ -5,8 +5,6 @@ import { ConnectedRouter } from 'connected-react-router';
 
 
 import store from '../store';
-import { ConfigProvider } from 'antd';
-import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import '../assets/style/index.less';
 import Layout from '../components/layout'
 import Home from '../pages/home';
@@ -23,14 +21,12 @@ const Root = () => {
     return (
         <Provider store={store}>
             <ConnectedRouter history={history}>
-                <ConfigProvider locale={zh_CN}>
-                    <Layout>
-                        <Switch>
-                            <Route path="/" exact component={Home} />
-                            <Route path="/details" exact component={Details} />
-                        </Switch>
-                    </Layout>
-                </ConfigProvider>
+                <Layout>
+                    <Switch>
+                        <Route path="/" exact component={Home} />
+                        <Route path="/details" exact component={Details} />
+                    </Switch>
+                </Layout>
             </ConnectedRouter>
         </Provider>
     )

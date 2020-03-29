@@ -13,6 +13,9 @@ module.exports = {
             data.push(config.htl_cd);
         }
         sql = sql.join(' ');
-        return await userBase.query(ctx, sql, data);
+        
+        //return await userBase.query(ctx, sql, data); //避免启动是校验mysql链接, 所以添加注释 
+
+        return {}
     }
 }

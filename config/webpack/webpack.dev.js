@@ -1,4 +1,3 @@
-const path = require('path')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
@@ -11,4 +10,4 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin() // 清空文件插件 默认会清空当前打包的目录
     ]
-}
+};

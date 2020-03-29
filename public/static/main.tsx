@@ -1,10 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// antd style
-// import 'antd/dist/antd.css';
-
-// tvirus style
-import 'tvirus/dist/tvirus.css';
 import router from './router/index';
 
 const CONTAINER = document.getElementById('root');

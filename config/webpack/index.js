@@ -4,45 +4,56 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PurgeCssExtractPlugin = require('purgecss-webpack-plugin');
-const tsImportPluginFactory = require('ts-import-plugin');
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const SMP = new SpeedMeasurePlugin();
 const devConfig = require('./webpack.dev');
 const prodConfig = require('./webpack.prod');
+const os = require('os');
+const ROOT_PATH = path.resolve(__dirname, '../../');
+const SRC_PATH = path.join(ROOT_PATH, 'public/static');
+const SRC_VIEW_PATH = path.join(ROOT_PATH, 'public/views');
+const DIST_PATH = path.join(ROOT_PATH, 'dist/static');
 
-const ROOT_PATH = path.resolve(__dirname);
-const SRC_PATH = path.join(ROOT_PATH, '../public/static');
-const VIEW_PATH = path.join(ROOT_PATH, '/src/views');
-const INDEX_PATH = path.resolve(SRC_PATH);
-const BUILD_PATH = path.join(ROOT_PATH, '/build/static/');
-const MODULES_PATH = path.join(ROOT_PATH, '/node_modules/');
+const HappyPack = require('happypack');
+
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 const resolve = (...filename) => {
     return path.resolve(...filename);
 };
+
 // 命令行的参数
 module.exports = (env) => {
     const isDev = env.development;
 
     const baseConfig = {
         entry: {
-            main: resolve(__dirname, '../public/static/main.tsx')
+            main: resolve(SRC_PATH, 'main.tsx')
         },
         output: {
-            path: resolve(__dirname, '../', 'dist/static'),
+            path: DIST_PATH,
             filename: 'js/[name].[chunkhash:8].js'
             //pathinfo: false
         },
         resolve: {
             alias: {
-                '@': resolve(__dirname, '../public/static'),
-                '~': resolve(__dirname, '../node_modules'),
-                Components: resolve(__dirname, '../public/static', './components'),
-                Libs: path.resolve(__dirname, '../public/static', './assets/libs')
+                '@': SRC_PATH,
+                '@components': resolve(SRC_PATH, 'components'),
+                '@language': resolve(SRC_PATH, 'language'),
+                '~': resolve(ROOT_PATH, 'node_modules')
             },
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.less']
         },
         plugins: [
+            new HappyPack({
+                id: 'babel',
+                loaders: [{
+                    loader: 'babel-loader?cacheDirectory'
+                }],
+                threadPool: happyThreadPool
+            }),
             new HtmlWebpackPlugin({
-                template: resolve(__dirname, '../public/views/index.html'),
+                template: resolve(SRC_VIEW_PATH, 'index.html'),
                 filename: 'index.html',
                 hash: true,
                 minify: !isDev
@@ -56,8 +67,9 @@ module.exports = (env) => {
                 chunks: ['main'] // 需要引入的代码块
                 // excludeChunks:['main'] // 排除某个模块
             }),
+
             new PurgeCssExtractPlugin({
-                paths: glob.sync(`public/**/*`, {
+                paths: glob.sync(path.join(SRC_PATH, '*/*/*.html'), {
                     nodir: true
                 })
             }),
@@ -76,25 +88,9 @@ module.exports = (env) => {
                 // },
                 {
                     test: /\.(j|t)sx?$/,
-                    loader: 'ts-loader',
-                    //babel-plugin-import 可以实现antd按需加载，所以它要和babel-loader配合使用
-                    //ts-loader
-                    options: {
-                        transpileOnly: true, //只转译，不检查
-                        getCustomTransformers: () => ({
-                            //获取或者说定义自定义的转换器
-                            before: [
-                                tsImportPluginFactory({
-                                    libraryName: 'antd', //对哪个模块进行按需加载
-                                    libraryDirectory: 'es', //按需加载的模块，如果实现按需加载，必须是ES Modules
-                                    style: 'css' //自动引入它对应的CSS
-                                })
-                            ]
-                        }),
-                        compilerOptions: {
-                            module: 'es2015'
-                        }
-                    }
+                    include: SRC_PATH,
+                    use: ['happypack/loader?id=babel']
+                    
                 },
                 {
                     test: /\.css$/,
@@ -114,14 +110,15 @@ module.exports = (env) => {
                 },
                 {
                     test: /\.less$/,
-                    exclude: path.resolve(__dirname, '../public/static/assets'),
+                    exclude: resolve(SRC_PATH, 'assets'),
                     use: [
                         'style-loader',
                         {
-                            loader: "css-loader",
+                            loader: 'css-loader',
                             options: {
+                                importLoaders: 0,
                                 modules: {
-                                    localIdentName: "[local]_[hash:base64:5]"
+                                    localIdentName: '[local]_[hash:base64:5]'
                                 }
                             }
                         },
@@ -131,40 +128,66 @@ module.exports = (env) => {
                                 plugins: [require('autoprefixer')]
                             }
                         },
-                        'less-loader'
-                    ]
-                    // exclude: /node_modules/
-                },
-                {
-                    test: /\.(less|css)$/,
-                    include: [path.resolve(__dirname, '../public/static/assets')],
-                    exclude: path.resolve(__dirname, '../public/static', './components'),
-                    use: [
                         {
-                            loader: "style-loader"
-                        },
-                        {
-                            loader: "css-loader"
-                        },
-                        {
-                            loader: "less-loader"
+                            loader: 'less-loader',
+                            options: {
+                                javascriptEnabled: true
+                            }
                         }
                     ]
                 },
                 {
-                    test: /\.(jpg|png|gif|svg|jpeg)$/,
-                    use: {
+                    test: /\.less$/,
+                    include: [resolve(SRC_PATH, 'assets')],
+                    use: [
+                        'style-loader',
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                importLoaders: 0
+                            }
+                        },
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: [require('autoprefixer')]
+                            }
+                        },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                javascriptEnabled: true
+                            }
+                        }
+                    ]
+                },
+                {
+                    test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+                    use: [{
                         loader: 'url-loader',
                         options: {
-                            limit: 10000,
-                            name: './assets/[name].[hash:7].[ext]',
+                            //1024 == 1kb  
+                            //小于10kb时打包成base64编码的图片否则单独打包成图片
+                            limit: 10240,
+                            name: path.join('./assets/[name].[hash:7].[ext]'),
                             esModule: false
                         }
-                    }
+                    }]
+                },
+                {
+                    test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+                    use: [{
+                        loader: 'url-loader',
+                        options: {
+                            limit: 10240,
+                            name: path.join('./assets/font/[name].[hash:7].[ext]')
+                        }
+                    }]
                 }
             ]
         }
     };
     // mergeOptions
-    return isDev ? merge(baseConfig, devConfig) : merge(baseConfig, prodConfig);
+    const mergeConfigs = isDev ? merge(baseConfig, devConfig) : merge(baseConfig, prodConfig);
+    return SMP.wrap(mergeConfigs);
 };

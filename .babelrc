@@ -1,20 +1,29 @@
 {
   "presets": [
-    "es2015",
-    "react",
-    "stage-2"
+    [
+      "@babel/preset-env",
+      {
+        "corejs": 3,
+        "useBuiltIns": "usage"
+      }
+    ],
+    "@babel/preset-typescript",
+    "@babel/preset-react"
   ],
   "plugins": [
-    "transform-decorators-legacy",
-    "transform-runtime",
+    "@babel/plugin-transform-runtime",
     [
-      "import",
+      "@babel/plugin-proposal-decorators",
       {
-        "libraryName": "antd",
-        "libraryDirectory": "es",
-        "style": "css",
-        "serverSideRequirePath": true
+        "legacy": true
       }
-    ]
+    ],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ],
+    "@babel/plugin-syntax-dynamic-import",
   ]
 }

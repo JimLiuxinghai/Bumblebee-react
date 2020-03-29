@@ -3,6 +3,24 @@
 > 企业级Node React 开发脚手架
 
 
+## 使用 
+
+### 服务端启动：
+参考 [Bumblebee](https://github.com/JimLiuxinghai/Bumblebee)
+
+### 前端：
+    
+    开发环境编译
+    ```
+    npm run watch
+    ```
+
+    线上环境编译
+
+    ```
+    npm run build
+    ```
+
 ## TODO
 
 * README补全
