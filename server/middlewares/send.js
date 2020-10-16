@@ -1,5 +1,3 @@
-let utilTips = require('../util/lib/tips.js');
-
 const sendHandle = () => {
     // 处理请求成功方法
     const render = ctx => {
@@ -13,7 +11,7 @@ const sendHandle = () => {
             config.data = config.data || [];
             config.type = config.type || 'OK';
 
-            let tips = utilTips[config.type];
+            let tips = util.errorModal[config.type];
             
             ctx.set('Content-Type', 'application/json');
             tips.data = config.data;
@@ -26,7 +24,7 @@ const sendHandle = () => {
         return (config = {}) => {
             config.type = config.type || 'ERR_SYSTEM_ERROR';
             ctx.set('Content-Type', 'application/json');
-            let tips = utilTips[config.type]
+            let tips = util.errorModal[config.type];
             ctx.body = tips
         }
     }
