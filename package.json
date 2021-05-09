@@ -24,7 +24,7 @@
     "axios": "^0.15.3",
     "core-js": "^3.6.4",
     "ghooks": "^2.0.4",
-    "handlebars": "^4.7.3",
+    "handlebars": "^4.7.7",
     "immer": "^6.0.1",
     "koa": "^2.11.0",
     "koa-bodyparser": "^3.2.0",
