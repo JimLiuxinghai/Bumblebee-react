@@ -39,7 +39,7 @@
     "koa-static": "^2.0.0",
     "koa-static-cache": "^5.1.2",
     "koa-views": "^5.2.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "mysql": "^2.9.0",
     "prop-types": "^15.7.2",
