@@ -5451,9 +5451,9 @@ immer@1.10.0:
   version "1.10.0"
   resolved "https://registry.npm.taobao.org/immer/download/immer-1.10.0.tgz?cache=0&sync_timestamp=1599661866460&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fimmer%2Fdownload%2Fimmer-1.10.0.tgz#bad67605ba9c810275d91e1c2a47d4582e98286d"
 
-immer@^6.0.1:
-  version "6.0.9"
-  resolved "https://registry.npm.taobao.org/immer/download/immer-6.0.9.tgz?cache=0&sync_timestamp=1599661866460&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fimmer%2Fdownload%2Fimmer-6.0.9.tgz#b9dd69b8e69b3a12391e87db1e3ff535d1b26485"
+immer@^9.0.6:
+  version "9.0.6"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.6.tgz#7a96bf2674d06c8143e327cbf73539388ddf1a73"
 
 import-cwd@^2.0.0:
   version "2.1.0"
